@@ -61,12 +61,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const logout = async () => {
     try {
-      // Try to call logout API, but don't block on failure
       await authAPI.logout();
     } catch (error) {
       console.log("Logout API failed, but clearing local data");
     } finally {
-      // Always clear local data
       setUser(null);
       localStorage.removeItem("user");
       localStorage.removeItem("token");

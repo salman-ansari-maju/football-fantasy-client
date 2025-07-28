@@ -17,10 +17,10 @@ const Dashboard = () => {
   const [activeTab, setActiveTab] = useState<"home" | "transfers">("home");
 
   useEffect(() => {
-    if (user) {
+    if (user && activeTab === "home") {
       loadTeam();
     }
-  }, [activeTab]);
+  }, [user, activeTab]);
 
   const loadTeam = async () => {
     if (!user) return;
