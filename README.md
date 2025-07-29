@@ -192,12 +192,26 @@ VITE_API_URL=http://your-backend-url/api
 
 ## Build and Deployment
 
-To build the project for production:
+After creating the project and installing dependencies, you can start the build process as follows:
 
-```bash
-npm run build
-# or
-yarn build
-```
+1. Build the project for production:
 
-The built files will be available in the `dist/` directory, ready for deployment to any static hosting service.
+   ```bash
+   npm run build
+   # or
+   yarn build
+   ```
+
+   This will generate optimized production files in the `dist/` directory.
+
+2. Preview the production build locally (optional):
+
+   ```bash
+   npm run preview
+   # or
+   yarn preview
+   ```
+
+   This will start a local server to preview the built app at `http://localhost:4173`.
+
+3. Deploy the contents of the `dist/` directory to your preferred static hosting service (e.g., Vercel, Netlify, GitHub Pages).
