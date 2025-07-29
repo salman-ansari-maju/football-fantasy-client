@@ -26,41 +26,56 @@ The project is organized as follows:
 
 ```
 ├── src/
+│   ├── App.tsx
+│   ├── index.css
+│   ├── main.tsx
+│   ├── vite-env.d.ts
 │   ├── components/
+│   │   ├── Layout.tsx
+│   │   ├── Navigation.tsx
 │   │   ├── Auth/
-│   │   │   └── AuthForm.tsx             // Login/Registration form component
+│   │   │   ├── Form.tsx                // Login/Registration form component
+│   │   │   └── InputField.tsx          // Input field for forms
 │   │   ├── Team/
-│   │   │   ├── MyTeam.tsx               // User's team display and management
-│   │   │   ├── PlayerCard.tsx           // Individual player card component
-│   │   │   ├── SellPlayerModal.tsx      // Modal for listing players for sale
-│   │   │   └── TeamCreation.tsx         // Team creation interface
+│   │   │   ├── Header.tsx
+│   │   │   ├── MyTeam.tsx              // User's team display and management
+│   │   │   ├── NoTeam.tsx              // Display when no team exists
+│   │   │   ├── PlayerCard.tsx          // Individual player card component
+│   │   │   ├── Players.tsx
+│   │   │   ├── SellPlayerModel.tsx     // Modal for listing players for sale
+│   │   │   ├── Stats.tsx
+│   │   │   └── TeamCreation.tsx        // Team creation interface
 │   │   ├── Transfer/
-│   │   │   └── TransferMarket.tsx       // Transfer market with buy/sell functionality
-│   │   ├── Layout.tsx                   // Main application layout wrapper
-│   │   └── Navigation.tsx               // Navigation component for switching views
+│   │   │   ├── Dropdown.tsx
+│   │   │   ├── Header.tsx
+│   │   │   ├── InputField.tsx
+│   │   │   ├── NoPlayers.tsx
+│   │   │   ├── PlayersListing.tsx
+│   │   │   ├── Stats.tsx
+│   │   │   └── TransferMarket.tsx      // Transfer market with buy/sell functionality
 │   ├── constant/
-│   │   └── index.ts                     // Application constants and configuration
+│   │   └── index.ts                    // Application constants and configuration
 │   ├── context/
-│   │   └── AuthContext.tsx              // Authentication context and state management
+│   │   └── AuthContext.tsx             // Authentication context and state management
+│   ├── navigation/
+│   │   └── index.tsx                   // Navigation logic and routes
 │   ├── pages/
-│   │   └── Dashboard.tsx                // Main dashboard page
+│   │   ├── Auth.tsx                    // Authentication page
+│   │   └── Dashboard.tsx               // Main dashboard page
 │   ├── services/
-│   │   ├── auth.ts                      // Authentication-specific API calls
-│   │   ├── axiosInstance.ts             // Axios instance with interceptors 
-│   │   ├── team.ts                      // API calls related to team operations
-│   │   └── transfer.ts                  // API calls related to player transfers
+│   │   ├── auth.ts                     // Authentication-specific API calls
+│   │   ├── axiosInstance.ts            // Axios instance with interceptors
+│   │   ├── team.ts                     // API calls related to team operations
+│   │   └── transfer.ts                 // API calls related to player transfers
 │   ├── types/
-│   │   ├── index.ts                     // TypeScript type definitions
-│   │   └── vite-env.d.ts                // Vite environment type definitions
-│   ├── App.tsx                          // Main application component
-│   ├── main.tsx                         // Application entry point
-│   └── index.css                        // Global styles and Tailwind imports
-├── index.html                           // HTML template file for Vite
-├── package.json                         // Project dependencies and scripts
-├── tailwind.config.js                   // Tailwind CSS configuration
-├── tsconfig.json                        // Base TypeScript configuration
-└── vite.config.ts                       // Vite build configuration
-
+│   │   └── index.ts                    // TypeScript type definitions
+├── index.html                          // HTML template file for Vite
+├── package.json                        // Project dependencies and scripts
+├── tailwind.config.js                  // Tailwind CSS configuration
+├── tsconfig.json                       // Base TypeScript configuration
+├── postcss.config.js                   // PostCSS configuration
+├── vite.config.ts                      // Vite build configuration
+├── eslint.config.js                    // ESLint configuration
 ```
 
 ## Description of Key Folders:
@@ -85,12 +100,14 @@ Before running the project, ensure that you have the following installed:
 Follow the steps below to get the project up and running:
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/salman-ansari-maju/football-fantasy-client.git
-cd football-fantacy-client
+cd football-fantasy-client
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 # or
@@ -98,6 +115,7 @@ yarn install
 ```
 
 3. Start the development server:
+
 ```bash
 npm run dev
 # or
@@ -105,6 +123,7 @@ yarn dev
 ```
 
 4. Open the app in the browser:
+
 ```
 http://localhost:3000
 ```
@@ -122,14 +141,17 @@ http://localhost:3000
 The frontend interacts with the backend through a comprehensive set of API endpoints:
 
 ### Authentication APIs
+
 • **POST** `/api/auth/login` - User login/registration with email and password
 • **POST** `/api/auth/logout` - User logout and token invalidation
 
 ### Team Management APIs
+
 • **GET** `/api/team` - Fetch user's team data including players and budget
 • **POST** `/api/team/create` - Create a new team with initial squad and budget
 
 ### Transfer Market APIs
+
 • **GET** `/api/transfer` - Get all players available in the transfer market
 • **POST** `/api/transfer/player/:playerId` - List a player for sale with asking price
 • **POST** `/api/transfer/buy/:playerId` - Purchase a player from the transfer market
@@ -137,13 +159,28 @@ The frontend interacts with the backend through a comprehensive set of API endpo
 
 All API interactions are managed in the `/src/services` folder using Axios with automatic token management and error handling.
 
-## Configuration
+## Environment & Configuration
 
 The application uses environment-based configuration:
 
-• **Base URL**: Configured in `/src/constant/index.ts` as `http://localhost:5000/api`
-• **Token Management**: Automatic JWT token handling with localStorage persistence
-• **Error Handling**: Global error interceptors for API responses and authentication
+• **Base URL**: Set in `/src/constant/index.ts` as:
+
+```typescript
+export const BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+```
+
+You can override the API URL by creating a `.env` file in the project root and adding:
+
+```env
+VITE_API_URL=http://your-backend-url/api
+```
+
+• **Token Management**: JWT tokens are handled automatically and stored in localStorage for session persistence.
+
+• **Error Handling**: All API errors are caught and displayed in the UI. Axios interceptors manage global error handling and authentication.
+
+• **Other Configs**: ESLint, Tailwind, and PostCSS are configured for code quality and styling.
 
 ## Development Features
 
