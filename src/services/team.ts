@@ -12,9 +12,9 @@ export const teamAPI = {
     }
   },
 
-  createTeam: async (teamName: string) => {
+  createTeam: async () => {
     try {
-      const response = await axiosInstance.post("/team/create", { teamName });
+      const response = await axiosInstance.post("/team/create");
       return response.data;
     } catch (error) {
       console.error("Create team API error:", error);

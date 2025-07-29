@@ -9,7 +9,6 @@ interface TeamCreationProps {
 }
 
 const TeamCreation = ({ onTeamCreated }: TeamCreationProps) => {
-  const [teamName, setTeamName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -23,7 +22,7 @@ const TeamCreation = ({ onTeamCreated }: TeamCreationProps) => {
     setError("");
 
     try {
-      const response: ApiResponse<Team> = await teamAPI.createTeam(teamName);
+      const response: ApiResponse<Team> = await teamAPI.createTeam();
 
       if (response.success) {
         // Team created successfully
@@ -107,39 +106,19 @@ const TeamCreation = ({ onTeamCreated }: TeamCreationProps) => {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit}>
-          {error && (
-            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm mb-6">
-              {error}
-            </div>
-          )}
-
-          <div className="mb-6">
-            <label
-              htmlFor="teamName"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Team Name
-            </label>
-            <input
-              id="teamName"
-              type="text"
-              required
-              value={teamName}
-              onChange={(e) => setTeamName(e.target.value)}
-              className="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              placeholder="Enter your team name"
-            />
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm mb-6">
+            {error}
           </div>
+        )}
 
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isLoading ? "Creating Team..." : "Create Team"}
-          </button>
-        </form>
+        <button
+          onClick={handleSubmit}
+          disabled={isLoading}
+          className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isLoading ? "Creating Team..." : "Create Team"}
+        </button>
       </div>
     </div>
   );
